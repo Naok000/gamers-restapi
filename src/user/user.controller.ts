@@ -16,6 +16,11 @@ export class UserController {
     return req.user;
   }
 
+  @Get('/session-id')
+  getLoginUserId(@Req() req: Request): string {
+    return req.user.id;
+  }
+
   @Patch()
   @Patch()
   updateUser(

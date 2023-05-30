@@ -17,13 +17,14 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-  async signUp(dto: AuthDto) {
+  async signUp(dto: AuthDto): Promise<Jwt> {
     const uuid = uuidv4();
     const hashed = await bcrypt.hash(dto.password, 12);
     try {
       await this.prisma.user.create({
         data: { id: uuid, email: dto.email, password: hashed },
       });
+      return this.generateJwt(uuid, dto.email);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -50,7 +51,7 @@ export class AuthService {
     };
     const secret = this.config.get('JWT_SECRET');
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '5m',
+      expiresIn: '10m',
       secret: secret,
     });
     return {

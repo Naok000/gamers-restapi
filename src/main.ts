@@ -19,7 +19,7 @@ async function bootstrap() {
   app.use(cookieParser());
   app.use(
     csurf({
-      cookie: { httpOnly: true, sameSite: 'none', secure: false },
+      cookie: { httpOnly: true, sameSite: 'none', secure: true },
       value: (req: Request) => {
         return req.header('csrf-token');
       },

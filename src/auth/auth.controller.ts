@@ -24,8 +24,17 @@ export class AuthController {
   }
 
   @Post('/signup')
-  signUp(@Body() dto: AuthDto) {
-    return this.authService.signUp(dto);
+  async signUp(
+    @Body() dto: AuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const jwt = await this.authService.signUp(dto);
+    res.cookie('access_token', jwt.accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      path: '/',
+    });
   }
 
   @HttpCode(HttpStatus.OK)
@@ -34,7 +43,7 @@ export class AuthController {
     const jwt = await this.authService.login(dto);
     res.cookie('access_token', jwt.accessToken, {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: 'none',
       path: '/',
     });

@@ -8,20 +8,24 @@ datasource db {
 }
 
 model Comment {
-  id      String @id
-  comment String
-  userId  String
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id
+  comment   String
+  timestamp DateTime @default(now())
+  userId    String
+  postingId String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posts     Posting  @relation(fields: [postingId], references: [id], onDelete: Cascade)
 }
 
 model Posting {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   title     String
   content   String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment   Comment[]
 }
 
 model User {
