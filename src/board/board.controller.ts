@@ -12,8 +12,9 @@ import { BoardService } from './board.service';
 import { CreatePostingDto } from './dto/create-posting.dto';
 import { Request } from 'express';
 import { Delete, HttpCode, UseGuards } from '@nestjs/common/decorators';
-import { AuthGuard } from '@nestjs/passport';
 import { PostingCommentDto } from './dto/posting-comment.dto';
+import JwtAuthGuard from 'src/guards/jwt-auth.guard';
+import RoleGuard from 'src/guards/auth-role.guard';
 
 @Controller('board')
 export class BoardController {
@@ -24,19 +25,19 @@ export class BoardController {
     return this.boardService.getAllPosting();
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   getPostingById(@Param('id') postingId: string): Promise<Posting> {
     return this.boardService.getPostingById(postingId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Get(':id/comment')
   getCommentById(@Param('id') postingId: string): Promise<Comment[]> {
     return this.boardService.getCommentById(postingId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(RoleGuard('USER'))
   @Post('/create')
   createPosting(
     @Req() req: Request,
@@ -45,7 +46,7 @@ export class BoardController {
     return this.boardService.createPosting(req.user.id, dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Post(':id/post-comment')
   postComment(
     @Param('id') postingId: string,
@@ -56,7 +57,7 @@ export class BoardController {
     return this.boardService.postComment(req.user.id, postingId, dto);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async deletePosting(
@@ -66,7 +67,7 @@ export class BoardController {
     return this.boardService.deletePostingById(req.user.id, postingId);
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id/comment')
   async deleteComment(

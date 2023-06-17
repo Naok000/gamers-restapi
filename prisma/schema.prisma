@@ -35,6 +35,12 @@ model User {
   email     String    @unique
   password  String
   userName  String?
+  role      UserRole
   comments  Comment[]
   posts     Posting[]
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }

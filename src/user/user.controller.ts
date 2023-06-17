@@ -17,8 +17,8 @@ export class UserController {
   }
 
   @Get('/session-id')
-  getLoginUserId(@Req() req: Request): string {
-    return req.user.id;
+  getLoginUserId(@Req() req: Request): { id: string; role: string } {
+    return { id: req.user.id, role: req.user.role };
   }
 
   @Patch()
