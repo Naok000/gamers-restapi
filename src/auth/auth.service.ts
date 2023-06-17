@@ -8,6 +8,7 @@ import { AuthDto } from './dto/auth.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { ForbiddenException } from '@nestjs/common/exceptions';
 import { Jwt } from './interface/auth.interface';
+import { UserRole } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,13 @@ export class AuthService {
     const hashed = await bcrypt.hash(dto.password, 12);
     try {
       await this.prisma.user.create({
-        data: { id: uuid, email: dto.email, password: hashed },
+        data: {
+          id: uuid,
+          userName: dto.userName,
+          email: dto.email,
+          password: hashed,
+          role: UserRole.USER,
+        },
       });
       return this.generateJwt(uuid, dto.email);
     } catch (error) {
