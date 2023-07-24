@@ -21,6 +21,7 @@ model Posting {
   id        String    @id
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+  gameTitle String
   title     String
   content   String?
   userId    String
@@ -38,6 +39,15 @@ model User {
   role      UserRole
   comments  Comment[]
   posts     Posting[]
+  avatar    Avatar? 
+}
+
+model Avatar {
+  id  String @id
+  fileName String
+  type Bytes @db.ByteA
+  userId String @unique
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 }
 
 enum UserRole {
