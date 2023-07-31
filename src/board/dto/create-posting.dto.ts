@@ -4,6 +4,10 @@ import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 export class CreatePostingDto {
   @IsString()
   @IsNotEmpty()
+  gameTitle: string;
+
+  @IsString()
+  @IsNotEmpty()
   title: string;
 
   @IsString()
