@@ -8,7 +8,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get('/posting')
-  getAllPosting() {
+  getAllPosting(): Promise<{ user: { userName: string } }[]> {
     return this.adminService.getAllPosting();
   }
 

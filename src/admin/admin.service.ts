@@ -1,15 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { Posting, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
 
-  getAllPosting(): Promise<Posting[]> {
+  getAllPosting(): Promise<{ user: { userName: string } }[]> {
     return this.prisma.posting.findMany({
       orderBy: {
         createdAt: 'desc',
+      },
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        user: {
+          select: {
+            userName: true,
+          },
+        },
       },
     });
   }
