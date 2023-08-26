@@ -15,38 +15,36 @@ import { Delete, HttpCode, UseGuards } from '@nestjs/common/decorators';
 import { PostingCommentDto } from './dto/posting-comment.dto';
 import JwtAuthGuard from 'src/guards/jwt-auth.guard';
 import RoleGuard from 'src/guards/auth-role.guard';
+import { commentUser, postedAll, postingById } from './types/board';
 
 @Controller('board')
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
   @Get()
-  getAllPosting(): Promise<Posting[]> {
+  getAllPosting(): Promise<postedAll[]> {
     return this.boardService.getAllPosting();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  getPostingById(@Param('id') postingId: string): Promise<Posting> {
+  getPostingById(@Param('id') postingId: string): Promise<postingById> {
     return this.boardService.getPostingById(postingId);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/comment')
-  getCommentById(@Param('id') postingId: string): Promise<Comment[]> {
+  getCommentById(@Param('id') postingId: string): Promise<commentUser[]> {
     return this.boardService.getCommentById(postingId);
   }
 
   @UseGuards(RoleGuard('USER'))
   @Post('/create')
-  createPosting(
-    @Req() req: Request,
-    @Body() dto: CreatePostingDto,
-  ): Promise<Posting> {
+  createPosting(@Req() req: Request, @Body() dto: CreatePostingDto) {
     return this.boardService.createPosting(req.user.id, dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RoleGuard('USER'))
   @Post(':id/post-comment')
   postComment(
     @Param('id') postingId: string,
@@ -57,7 +55,7 @@ export class BoardController {
     return this.boardService.postComment(req.user.id, postingId, dto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RoleGuard('USER'))
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async deletePosting(
