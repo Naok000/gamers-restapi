@@ -20,18 +20,32 @@ export class AuthService {
 
   async signUp(dto: AuthDto): Promise<Jwt> {
     const uuid = uuidv4();
-    const hashed = await bcrypt.hash(dto.password, 12);
+    const { userName, email, url, password, fileName } = { ...dto };
+    const hashed = await bcrypt.hash(password, 12);
+    const avatarId = uuidv4();
+
     try {
+      const user = await this.prisma.user.findFirst({
+        where: { userName: userName },
+      });
+      if (user) throw new ForbiddenException('This username is already taken');
       await this.prisma.user.create({
         data: {
           id: uuid,
-          userName: dto.userName,
-          email: dto.email,
+          userName,
+          email,
           password: hashed,
           role: UserRole.USER,
+          avatar: {
+            create: {
+              id: avatarId,
+              avatarImgURL: url,
+              avatarFileName: fileName,
+            },
+          },
         },
       });
-      return this.generateJwt(uuid, dto.email);
+      return this.generateJwt(uuid, email);
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
         if (error.code === 'P2002') {
@@ -58,7 +72,7 @@ export class AuthService {
     };
     const secret = this.config.get('JWT_SECRET');
     const token = await this.jwt.signAsync(payload, {
-      expiresIn: '10m',
+      expiresIn: '60m',
       secret: secret,
     });
     return {
