@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Comment {
-  id        String   @id
+  id        String   @id 
   comment   String
   timestamp DateTime @default(now())
   userId    String
@@ -24,9 +24,11 @@ model Posting {
   gameTitle String
   title     String
   content   String?
-  userId    String
+  userId    String    
+  thumbnailId String  @unique
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   comment   Comment[]
+  thumbnail Thumbnail? 
 }
 
 model User {
@@ -44,8 +46,8 @@ model User {
 
 model Avatar {
   id  String @id
-  fileName String
-  type Bytes @db.ByteA
+  avatarFileName String
+  avatarImgURL String
   userId String @unique
   user User @relation(fields: [userId],references: [id],onDelete: Cascade)
 }
@@ -53,4 +55,12 @@ model Avatar {
 enum UserRole {
   ADMIN
   USER
+}
+
+model Thumbnail {
+  id String @id
+  postingId String @unique
+  thumbnailFileName String
+  imageURL  String
+  post Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
 }
