@@ -64,14 +64,4 @@ export class BoardController {
   ): Promise<void> {
     return this.boardService.deletePostingById(req.user.id, postingId);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id/comment')
-  async deleteComment(
-    @Param('id') postingId: string,
-    @Req() req: Request,
-  ): Promise<void> {
-    return this.boardService.deleteCommentById(req.user.id, postingId);
-  }
 }
