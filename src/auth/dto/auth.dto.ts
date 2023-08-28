@@ -18,4 +18,12 @@ export class AuthDto {
   @IsNotEmpty()
   @MinLength(5)
   password: string;
+
+  @IsOptional()
+  @IsString()
+  url: string;
+
+  @IsOptional()
+  @IsString()
+  fileName: string;
 }

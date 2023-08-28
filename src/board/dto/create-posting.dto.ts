@@ -14,12 +14,17 @@ export class CreatePostingDto {
   @IsOptional()
   content?: string;
 
+  @IsString()
+  @IsOptional()
+  imageURL: string;
+
+  @IsString()
+  @IsOptional()
+  thumbnailFileName: string;
+
   @Exclude()
   createdAt: Date;
 
   @Exclude()
   updatedAt: Date;
-
-  @Exclude()
-  userId: string;
 }
