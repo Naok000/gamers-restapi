@@ -137,7 +137,4 @@ export class BoardService {
     });
   }
 
-  async deleteCommentById(userId: string, postingId: string): Promise<void> {
-    // const comment = await this.prisma.comment.findUnique();
-  }
 }
