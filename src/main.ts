@@ -14,7 +14,7 @@ async function bootstrap() {
   app.enableCors({
     // cookieで処理をするためcredentialsをtrueにしている
     credentials: true,
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'https://gamers-board.vercel.app/'],
   });
   app.use(cookieParser());
   app.use(
