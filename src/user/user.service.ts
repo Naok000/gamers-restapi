@@ -1,11 +1,34 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Posting, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ProfileType } from './types/user';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getOwnPosting(userId: string): Promise<Posting[]> {
+    const ownerPosting = await this.prisma.posting.findMany({
+      where: { userId },
+    });
+
+    return ownerPosting;
+  }
+
+  async getUserProfile(userId: string): Promise<ProfileType> {
+    const userProfile = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        userName: true,
+        createdAt: true,
+        avatar: { select: { avatarImgURL: true } },
+      },
+    });
+
+    return userProfile;
+  }
 
   async updateUser(
     userId: string,
