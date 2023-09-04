@@ -26,8 +26,8 @@ export class BoardService {
     return allPosting;
   }
 
-  getPostingById(postingId: string): Promise<postingById> {
-    return this.prisma.posting.findUnique({
+  async getPostingById(postingId: string): Promise<postingById> {
+    return await this.prisma.posting.findUnique({
       where: { id: postingId },
       select: {
         id: true,
@@ -49,8 +49,8 @@ export class BoardService {
     });
   }
 
-  getCommentById(postingId: string): Promise<commentUser[]> {
-    return this.prisma.comment.findMany({
+  async getCommentById(postingId: string): Promise<commentUser[]> {
+    return await this.prisma.comment.findMany({
       where: { postingId },
       select: {
         id: true,
@@ -136,5 +136,4 @@ export class BoardService {
       include: { thumbnail: {} },
     });
   }
-
 }
