@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { Posting, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -40,5 +40,14 @@ export class UserService {
     });
     delete user.password;
     return user;
+  }
+
+  async deleteUser(userId: string): Promise<void> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user || user.id !== userId) {
+      throw new ForbiddenException('No permission to delete');
+    }
+
+    await this.prisma.user.delete({ where: { id: userId } });
   }
 }
