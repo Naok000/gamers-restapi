@@ -3,6 +3,7 @@ import { Posting, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileType } from './types/user';
+import { AvatarDto } from './dto/avatar.dto';
 
 @Injectable()
 export class UserService {
@@ -23,11 +24,19 @@ export class UserService {
         id: true,
         userName: true,
         createdAt: true,
-        avatar: { select: { avatarImgURL: true } },
+        avatar: { select: { avatarImgURL: true, avatarFileName: true } },
       },
     });
 
     return userProfile;
+  }
+
+  async updateAvatarImage(userId: string, dto: AvatarDto) {
+    const userAvatar = await this.prisma.avatar.update({
+      where: { userId: userId },
+      data: { ...dto },
+    });
+    return userAvatar;
   }
 
   async updateUser(
