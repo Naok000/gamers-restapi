@@ -14,6 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { ProfileType } from './types/user';
 import RoleGuard from 'src/guards/auth-role.guard';
+import { AvatarDto } from './dto/avatar.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('user')
@@ -33,6 +34,11 @@ export class UserController {
   @Get('/own-posting')
   getOwnPosting(@Req() req: Request): Promise<Posting[]> {
     return this.userService.getOwnPosting(req.user.id);
+  }
+
+  @Patch('/avatar')
+  updateAvatarImage(@Req() req: Request, @Body() dto: AvatarDto) {
+    return this.userService.updateAvatarImage(req.user.id, dto);
   }
 
   @Patch()

@@ -7,7 +7,7 @@ import {
   Param,
   HttpStatus,
 } from '@nestjs/common';
-import { Comment, Posting } from '@prisma/client';
+import { Comment } from '@prisma/client';
 import { BoardService } from './board.service';
 import { CreatePostingDto } from './dto/create-posting.dto';
 import { Request } from 'express';
