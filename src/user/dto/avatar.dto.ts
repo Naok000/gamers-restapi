@@ -7,6 +7,10 @@ export class AvatarDto {
   filename: string;
 
   @IsNotEmpty()
+  @IsString()
+  url: string;
+
+  @IsNotEmpty()
   @Exclude()
   userId: string;
 }
