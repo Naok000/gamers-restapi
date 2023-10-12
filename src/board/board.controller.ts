@@ -7,7 +7,7 @@ import {
   Param,
   HttpStatus,
 } from '@nestjs/common';
-import { Comment } from '@prisma/client';
+import { BookMark, Comment } from '@prisma/client';
 import { BoardService } from './board.service';
 import { CreatePostingDto } from './dto/create-posting.dto';
 import { Request } from 'express';
@@ -53,6 +53,15 @@ export class BoardController {
     @Body() dto: PostingCommentDto,
   ): Promise<Comment> {
     return this.boardService.postComment(req.user.id, postingId, dto);
+  }
+
+  @UseGuards(RoleGuard('USER'))
+  @Post(':id/book-mark')
+  registerBookMark(
+    @Param('id') postingId: string,
+    @Req() req: Request,
+  ): Promise<BookMark> {
+    return this.boardService.registerBookMark(req.user.id, postingId);
   }
 
   @UseGuards(RoleGuard('USER'))

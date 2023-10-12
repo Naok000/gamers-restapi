@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
-import { Comment } from '@prisma/client';
+import { BookMark, Comment } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePostingDto } from './dto/create-posting.dto';
 import { PostingCommentDto } from './dto/posting-comment.dto';
@@ -121,6 +121,15 @@ export class BoardService {
       data: { id: id, userId, postingId, ...dto },
     });
     return comment;
+  }
+
+  async registerBookMark(userId: string, postingId: string): Promise<BookMark> {
+    const id: string = uuidv4();
+    const bookMark = this.prisma.bookMark.create({
+      data: { id: id, userId, postingId },
+    });
+
+    return bookMark;
   }
 
   async deletePostingById(userId: string, postingId: string): Promise<void> {

@@ -18,17 +18,18 @@ model Comment {
 }
 
 model Posting {
-  id        String    @id
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  gameTitle String
-  title     String
-  content   String?
-  userId    String    
+  id          String    @id
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  gameTitle   String
+  title       String
+  content     String?
+  userId      String    
   thumbnailId String  @unique
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  comment   Comment[]
-  thumbnail Thumbnail? 
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment     Comment[]
+  thumbnail   Thumbnail?
+  bookMark    BookMark[]  
 }
 
 model User {
@@ -41,15 +42,16 @@ model User {
   role      UserRole
   comments  Comment[]
   posts     Posting[]
-  avatar    Avatar? 
+  avatar    Avatar?
+  bookMark  BookMark[] 
 }
 
 model Avatar {
-  id  String @id
+  id             String @id
   avatarFileName String
-  avatarImgURL String
-  userId String @unique
-  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  avatarImgURL   String
+  userId         String @unique
+  user           User @relation(fields: [userId],references: [id],onDelete: Cascade)
 }
 
 enum UserRole {
@@ -58,9 +60,17 @@ enum UserRole {
 }
 
 model Thumbnail {
-  id String @id
-  postingId String @unique
+  id                String @id
+  postingId         String @unique
   thumbnailFileName String
-  imageURL  String
-  post Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+  imageURL          String
+  post              Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
+model BookMark {
+  id        String @id 
+  postingId String @unique
+  userId    String
+  user      User @relation(fields: [userId],references: [id],onDelete: Cascade)
+  post      Posting @relation(fields: [postingId],references: [id],onDelete: Cascade)
 }
