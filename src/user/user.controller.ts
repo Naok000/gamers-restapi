@@ -7,16 +7,16 @@ import {
   Patch,
   Req,
 } from '@nestjs/common/decorators';
-import { AuthGuard } from '@nestjs/passport';
+import JwtAuthGuard from 'src/guards/jwt-auth.guard';
+import RoleGuard from 'src/guards/auth-role.guard';
 import { Posting, User } from '@prisma/client';
 import { Request } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 import { ProfileType } from './types/user';
-import RoleGuard from 'src/guards/auth-role.guard';
 import { AvatarDto } from './dto/avatar.dto';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
