@@ -28,8 +28,11 @@ export class BoardController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  getPostingById(@Param('id') postingId: string): Promise<postingById> {
-    return this.boardService.getPostingById(postingId);
+  getPostingById(
+    @Req() req: Request,
+    @Param('id') postingId: string,
+  ): Promise<postingById> {
+    return this.boardService.getPostingById(req.user.id, postingId);
   }
 
   @UseGuards(JwtAuthGuard)
