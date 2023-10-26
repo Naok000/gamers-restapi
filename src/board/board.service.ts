@@ -26,7 +26,10 @@ export class BoardService {
     return allPosting;
   }
 
-  async getPostingById(postingId: string): Promise<postingById> {
+  async getPostingById(
+    userId: string,
+    postingId: string,
+  ): Promise<postingById> {
     return await this.prisma.posting.findUnique({
       where: { id: postingId },
       select: {
@@ -43,6 +46,12 @@ export class BoardService {
           select: {
             userName: true,
             avatar: { select: { avatarImgURL: true } },
+          },
+        },
+        bookMark: {
+          where: { userId: userId },
+          select: {
+            id: true,
           },
         },
       },
