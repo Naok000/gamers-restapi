@@ -22,4 +22,5 @@ export type postingById = {
   createdAt: Date;
   user: { userName: string; avatar: { avatarImgURL: string } };
   thumbnail: { imageURL: string; thumbnailFileName: string };
+  bookMark: { id: string }[];
 };

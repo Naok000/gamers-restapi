@@ -69,6 +69,16 @@ export class BoardController {
 
   @UseGuards(RoleGuard('USER'))
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id/book-mark')
+  async removeBookMark(
+    @Param('id') postingId: string,
+    @Req() req: Request,
+  ): Promise<void> {
+    return this.boardService.removeBookMark(req.user.id, postingId);
+  }
+
+  @UseGuards(RoleGuard('USER'))
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
   async deletePosting(
     @Param('id') postingId: string,

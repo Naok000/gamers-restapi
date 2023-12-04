@@ -49,7 +49,7 @@ export class BoardService {
           },
         },
         bookMark: {
-          where: { userId: userId },
+          where: { userId },
           select: {
             id: true,
           },
@@ -137,8 +137,30 @@ export class BoardService {
     const bookMark = this.prisma.bookMark.create({
       data: { id: id, userId, postingId },
     });
-
     return bookMark;
+  }
+
+  async removeBookMark(userId: string, postingId: string): Promise<void> {
+    const bookMark = await this.prisma.bookMark.findUnique({
+      where: {
+        bookMark_user: {
+          userId,
+          postingId,
+        },
+      },
+    });
+    if (!bookMark || bookMark.userId !== userId) {
+      throw new ForbiddenException('No permission to delete');
+    }
+
+    await this.prisma.bookMark.delete({
+      where: {
+        bookMark_user: {
+          userId,
+          postingId,
+        },
+      },
+    });
   }
 
   async deletePostingById(userId: string, postingId: string): Promise<void> {
