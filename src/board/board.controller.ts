@@ -59,7 +59,7 @@ export class BoardController {
   }
 
   @UseGuards(RoleGuard('USER'))
-  @Post(':id/book-mark')
+  @Post(':id/bookmark')
   registerBookMark(
     @Param('id') postingId: string,
     @Req() req: Request,
@@ -69,7 +69,7 @@ export class BoardController {
 
   @UseGuards(RoleGuard('USER'))
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id/book-mark')
+  @Delete(':id/bookmark')
   async removeBookMark(
     @Param('id') postingId: string,
     @Req() req: Request,
