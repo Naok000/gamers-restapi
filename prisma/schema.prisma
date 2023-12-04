@@ -70,7 +70,8 @@ model Thumbnail {
 model BookMark {
   id        String @id 
   postingId String @unique
-  userId    String
+  userId    String @unique
+  @@unique([postingId,userId], name:"bookMark_user")
   user      User @relation(fields: [userId],references: [id],onDelete: Cascade)
   post      Posting @relation(fields: [postingId],references: [id],onDelete: Cascade)
 }
