@@ -48,12 +48,6 @@ export class BoardService {
             avatar: { select: { avatarImgURL: true } },
           },
         },
-        bookMark: {
-          where: { userId },
-          select: {
-            id: true,
-          },
-        },
       },
     });
   }
