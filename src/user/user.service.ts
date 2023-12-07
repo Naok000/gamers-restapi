@@ -1,5 +1,5 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { Posting, User } from '@prisma/client';
+import { BookMark, Posting, User } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ProfileType } from './types/user';
@@ -29,6 +29,14 @@ export class UserService {
     });
 
     return userProfile;
+  }
+
+  async getBookmark(userId: string): Promise<BookMark[]> {
+    const getOwnBookmark = await this.prisma.bookMark.findMany({
+      where: { userId },
+    });
+
+    return getOwnBookmark;
   }
 
   async updateAvatarImage(userId: string, dto: AvatarDto) {

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common/decorators';
 import JwtAuthGuard from 'src/guards/jwt-auth.guard';
 import RoleGuard from 'src/guards/auth-role.guard';
-import { Posting, User } from '@prisma/client';
+import { BookMark, Posting, User } from '@prisma/client';
 import { Request } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
@@ -24,6 +24,11 @@ export class UserController {
   @Get()
   getLoginUserProfile(@Req() req: Request): Promise<ProfileType> {
     return this.userService.getUserProfile(req.user.id);
+  }
+
+  @Get('/bookmark')
+  getOwnBookmark(@Req() req: Request): Promise<BookMark[]> {
+    return this.userService.getBookmark(req.user.id);
   }
 
   @Get('/session-id')
